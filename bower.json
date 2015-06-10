@@ -1,0 +1,30 @@
+{
+  "name": "angularGruntDemo",
+  "version": "1.0.0",
+  "authors": [
+    "Mariano Julio Vicario <elranu@gmail.com>"
+  ],
+  "description": "Demo",
+  "moduleType": [
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  
+  "dependencies": {
+    "underscore": "~1.5.1",
+    "angular": "1.4.0",
+    "angular-route": "1.4.0",
+    "angular-resource": "1.4.0"
+  },
+  
+  "devDependencies" : {
+    "angular-mocks": "1.4.0"
+  }
+  
+}
