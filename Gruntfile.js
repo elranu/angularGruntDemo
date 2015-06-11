@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 	appConfig.jsFiles = [appConfig.appPath + '/**/*.js'];
 	appConfig.bowerJsFiles = ['bower.json'];
 	appConfig.allJsFiles = appConfig.bowerJsFiles.concat(appConfig.jsFiles);
-	appConfig.allJsFiles.push(appConfig.tempPath + '/templates.js'); //tempates at the end
+	appConfig.allJsFiles.push(appConfig.tempPath + '/templates.js'); //templates at the end
 	
 	//load grunt Plugins
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -102,6 +102,7 @@ module.exports = function (grunt) {
 	        	}
 	      	}
 	    }
+
 	});//end grunt intConfig
 
 	grunt.registerTask('build', [
