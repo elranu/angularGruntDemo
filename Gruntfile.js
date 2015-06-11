@@ -12,6 +12,7 @@ module.exports = function (grunt) {
 	appConfig.jsFiles = [appConfig.appPath + '/**/*.js'];
 	appConfig.bowerJsFiles = ['bower.json'];
 	appConfig.allJsFiles = appConfig.bowerJsFiles.concat(appConfig.jsFiles);
+	appConfig.allJsFiles.push(appConfig.tempPath + '/templates.js'); //tempates at the end
 	
 	//load grunt Plugins
 	grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -19,6 +20,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-bower-concat');
 	grunt.loadNpmTasks('grunt-ng-annotate');
+	grunt.loadNpmTasks('grunt-filerev');
+	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-angular-templates');
 	
 	grunt.loadNpmTasks('grunt-contrib-connect');
 
@@ -36,21 +40,9 @@ module.exports = function (grunt) {
 		      }
 		    }
 		},
-		
-		injector: {
-	    	options: {},
-	    	originals: {
-	      		files: {
-	        		'<%=appConfig.appPath %>/index.html': appConfig.allJsFiles
-	        	}
-	      	},
-	      	minified : {
-	      		files: {
-	        		'<%=appConfig.appPath %>/index.html': [appConfig.dist +'/output.min.js']
-	        	}
-	      	}
-	    },
 
+		clean: [appConfig.dist, appConfig.tempPath ],
+		
 	    bower_concat: {
   			all: {
     			dest: appConfig.tempPath + '/_bower.js'
@@ -68,28 +60,63 @@ module.exports = function (grunt) {
 	        } 
 	    },
 
+	    ngtemplates:  {
+			angularApp: {
+				cwd: appConfig.appPath,
+				src: 'views/**.html',
+			    dest: appConfig.tempPath + '/templates.js',
+			}
+		},
+
 	  	uglify: {
 			options: {
 		      mangle: false
 		    },
 		    minified: {
 		      files: {
-		        '<%=appConfig.dist %>/output.min.js': [appConfig.tempPath + '/_bower.js', '<%= appConfig.tempPath %>/annotated.js']
+		        '<%=appConfig.dist %>/scripts/output.min.js': [appConfig.tempPath + '/_bower.js', '<%= appConfig.tempPath %>/annotated.js',  '<%= ngtemplates.angularApp.dest  %>']
 		      }
 		    }
-  		}
+  		},
 
+  		filerev: {
+		    dist: {
+		        src: [
+		          '<%= appConfig.dist %>/scripts/{,*/}*.js'
+		        ]
+	     	}
+    	},
 
+    	injector: {
+	    	options: {},
+	    	originals: {
+	      		options: {},
+	      		files: {
+	        		'<%=appConfig.appPath %>/index.html': appConfig.allJsFiles
+	        	}
+	      	},
+	      	minified : {
+	      		options: {},
+	      		files: {
+	        		'<%=appConfig.appPath %>/index.html': [appConfig.dist +'/scripts/*.js']
+	        	}
+	      	}
+	    }
 	});//end grunt intConfig
 
 	grunt.registerTask('build', [
+		'clean',
 		'bower_concat',
 		'ngAnnotate:angularApp',
+		'ngtemplates',
 		'uglify:minified',
+		'filerev',
 		'injector:minified',
 	]);
 
 	grunt.registerTask('devBuild', [
+		'clean',
+		'ngtemplates',
 		'injector:originals',
 	]);
 

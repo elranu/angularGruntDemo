@@ -2,6 +2,6 @@
 
 angular.module('angularApp').controller('MainController', function($scope){
 	
-	$scope.someText = 'loco';
+	$scope.someText = 'locoqiueieri';
 
 });
