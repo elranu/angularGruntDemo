@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('angularApp').controller('MainController', function($scope){
+angular.module('angularApp').controller('MainController', function($scope, noopService){
 	
-	$scope.someText = 'locoqiueieri';
+	$scope.someText = noopService.getSomeText();
 
 });
+

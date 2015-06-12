@@ -6,7 +6,6 @@ module.exports = function (grunt) {
 		appPath : 'app',
 		dist : 'dist',
 		tempPath: '.temp'
-		//distJsName = 'built.js'
 	};
 	
 	appConfig.jsFiles = [appConfig.appPath + '/**/*.js'];
